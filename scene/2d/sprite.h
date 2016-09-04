@@ -43,20 +43,12 @@ class Sprite : public Node2D {
 
 	bool hflip;
 	bool vflip;
-	bool region;
 	Rect2 region_rect;
-
-	int frame;
-
-	int vframes;
-	int hframes;
 
 protected:
 	void _notification(int p_what);
 
 	static void _bind_methods();
-
-	virtual void _validate_property(PropertyInfo &property) const;
 
 public:
 	virtual void edit_set_pivot(const Point2 &p_pivot);
@@ -78,20 +70,8 @@ public:
 	void set_flip_v(bool p_flip);
 	bool is_flipped_v() const;
 
-	void set_region(bool p_region);
-	bool is_region() const;
-
-	void set_region_rect(const Rect2 &p_region_rect);
+	void set_region_rect(const Rect2& p_region_rect);
 	Rect2 get_region_rect() const;
-
-	void set_frame(int p_frame);
-	int get_frame() const;
-
-	void set_vframes(int p_amount);
-	int get_vframes() const;
-
-	void set_hframes(int p_amount);
-	int get_hframes() const;
 
 	virtual Rect2 get_item_rect() const;
 

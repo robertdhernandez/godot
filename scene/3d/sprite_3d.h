@@ -139,44 +139,20 @@ class Sprite3D : public SpriteBase3D {
 
 	GDCLASS(Sprite3D, SpriteBase3D);
 	Ref<Texture> texture;
-
-	bool region;
 	Rect2 region_rect;
-
-	int frame;
-
-	int vframes;
-	int hframes;
-
+	
 protected:
 	virtual void _draw();
 	static void _bind_methods();
-
-	virtual void _validate_property(PropertyInfo &property) const;
-
+	
 public:
-	void set_texture(const Ref<Texture> &p_texture);
+	void set_texture(const Ref<Texture>& p_texture);
 	Ref<Texture> get_texture() const;
 
-	void set_region(bool p_region);
-	bool is_region() const;
-
-	void set_region_rect(const Rect2 &p_region_rect);
+	void set_region_rect(const Rect2& p_region_rect);
 	Rect2 get_region_rect() const;
 
-	void set_frame(int p_frame);
-	int get_frame() const;
-
-	void set_vframes(int p_amount);
-	int get_vframes() const;
-
-	void set_hframes(int p_amount);
-	int get_hframes() const;
-
 	virtual Rect2 get_item_rect() const;
-
-	Sprite3D();
-	//~Sprite3D();
 };
 
 #if 0

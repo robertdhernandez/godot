@@ -322,21 +322,8 @@ void Sprite3D::_draw() {
 	if (tsize.x == 0 || tsize.y == 0)
 		return;
 
-	Size2i s;
-	Rect2i src_rect;
-
-	if (region) {
-
-		s = region_rect.size;
-		src_rect = region_rect;
-	} else {
-		s = texture->get_size();
-		s = s / Size2i(hframes, vframes);
-
-		src_rect.size = s;
-		src_rect.pos.x += (frame % hframes) * s.x;
-		src_rect.pos.y += (frame / hframes) * s.y;
-	}
+	Size2i s=region_rect.size;
+	Rect2i src_rect=region_rect;
 
 	Point2i ofs = get_offset();
 	if (is_centered())
@@ -438,6 +425,7 @@ void Sprite3D::set_texture(const Ref<Texture> &p_texture) {
 		texture->disconnect(CoreStringNames::get_singleton()->changed, this, SceneStringNames::get_singleton()->_queue_update);
 	}
 	texture = p_texture;
+	set_region_rect(Rect2(Vector2(),texture->get_size()));
 	if (texture.is_valid()) {
 		texture->set_flags(texture->get_flags()); //remove repeat from texture, it looks bad in sprites
 		texture->connect(CoreStringNames::get_singleton()->changed, this, SceneStringNames::get_singleton()->_queue_update);
@@ -450,27 +438,12 @@ Ref<Texture> Sprite3D::get_texture() const {
 	return texture;
 }
 
-void Sprite3D::set_region(bool p_region) {
-
-	if (p_region == region)
-		return;
-
-	region = p_region;
-	_queue_update();
-}
-
-bool Sprite3D::is_region() const {
-
-	return region;
-}
-
-void Sprite3D::set_region_rect(const Rect2 &p_region_rect) {
+void Sprite3D::set_region_rect(const Rect2& p_region_rect) {
 
 	bool changed = region_rect != p_region_rect;
 	region_rect = p_region_rect;
-	if (region && changed) {
+	if (changed)
 		_queue_update();
-	}
 }
 
 Rect2 Sprite3D::get_region_rect() const {
@@ -478,66 +451,14 @@ Rect2 Sprite3D::get_region_rect() const {
 	return region_rect;
 }
 
-void Sprite3D::set_frame(int p_frame) {
-
-	ERR_FAIL_INDEX(p_frame, vframes * hframes);
-
-	if (frame != p_frame)
-
-		frame = p_frame;
-	_queue_update();
-	emit_signal(SceneStringNames::get_singleton()->frame_changed);
-}
-
-int Sprite3D::get_frame() const {
-
-	return frame;
-}
-
-void Sprite3D::set_vframes(int p_amount) {
-
-	ERR_FAIL_COND(p_amount < 1);
-	vframes = p_amount;
-	_queue_update();
-	_change_notify("frame");
-}
-int Sprite3D::get_vframes() const {
-
-	return vframes;
-}
-
-void Sprite3D::set_hframes(int p_amount) {
-
-	ERR_FAIL_COND(p_amount < 1);
-	hframes = p_amount;
-	_queue_update();
-	_change_notify("frame");
-}
-int Sprite3D::get_hframes() const {
-
-	return hframes;
-}
-
 Rect2 Sprite3D::get_item_rect() const {
 
 	if (texture.is_null())
 		return Rect2(0, 0, 1, 1);
-	/*
-	if (texture.is_null())
-		return CanvasItem::get_item_rect();
-	*/
 
-	Size2i s;
-
-	if (region) {
-
-		s = region_rect.size;
-	} else {
-		s = texture->get_size();
-		s = s / Point2(hframes, vframes);
-	}
-
+	Size2i s = region_rect.size;
 	Point2i ofs = get_offset();
+	
 	if (is_centered())
 		ofs -= s / 2;
 
@@ -547,52 +468,16 @@ Rect2 Sprite3D::get_item_rect() const {
 	return Rect2(ofs, s);
 }
 
-void Sprite3D::_validate_property(PropertyInfo &property) const {
-
-	if (property.name == "frame") {
-
-		property.hint = PROPERTY_HINT_SPRITE_FRAME;
-
-		property.hint_string = "0," + itos(vframes * hframes - 1) + ",1";
-	}
-}
-
 void Sprite3D::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_texture", "texture:Texture"), &Sprite3D::set_texture);
 	ClassDB::bind_method(D_METHOD("get_texture:Texture"), &Sprite3D::get_texture);
 
-	ClassDB::bind_method(D_METHOD("set_region", "enabled"), &Sprite3D::set_region);
-	ClassDB::bind_method(D_METHOD("is_region"), &Sprite3D::is_region);
-
 	ClassDB::bind_method(D_METHOD("set_region_rect", "rect"), &Sprite3D::set_region_rect);
 	ClassDB::bind_method(D_METHOD("get_region_rect"), &Sprite3D::get_region_rect);
 
-	ClassDB::bind_method(D_METHOD("set_frame", "frame"), &Sprite3D::set_frame);
-	ClassDB::bind_method(D_METHOD("get_frame"), &Sprite3D::get_frame);
-
-	ClassDB::bind_method(D_METHOD("set_vframes", "vframes"), &Sprite3D::set_vframes);
-	ClassDB::bind_method(D_METHOD("get_vframes"), &Sprite3D::get_vframes);
-
-	ClassDB::bind_method(D_METHOD("set_hframes", "hframes"), &Sprite3D::set_hframes);
-	ClassDB::bind_method(D_METHOD("get_hframes"), &Sprite3D::get_hframes);
-
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_texture", "get_texture");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "vframes", PROPERTY_HINT_RANGE, "1,16384,1"), "set_vframes", "get_vframes");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "hframes", PROPERTY_HINT_RANGE, "1,16384,1"), "set_hframes", "get_hframes");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "frame", PROPERTY_HINT_SPRITE_FRAME), "set_frame", "get_frame");
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "region"), "set_region", "is_region");
-	ADD_PROPERTY(PropertyInfo(Variant::RECT2, "region_rect"), "set_region_rect", "get_region_rect");
-
-	ADD_SIGNAL(MethodInfo("frame_changed"));
-}
-
-Sprite3D::Sprite3D() {
-
-	region = false;
-	frame = 0;
-	vframes = 1;
-	hframes = 1;
+	ADD_PROPERTY(PropertyInfo(Variant::RECT2, "region_rect"), "set_region_rect", "get_region_rect");	
 }
 
 ////////////////////////////////////////

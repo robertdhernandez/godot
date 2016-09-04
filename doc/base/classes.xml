@@ -39835,20 +39835,6 @@
 		General purpose Sprite node. This Sprite node can show any texture as a sprite. The texture can be used as a spritesheet for animation, or only a region from a bigger texture can referenced, like an atlas.
 	</description>
 	<methods>
-		<method name="get_frame" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-				Return the texture frame for a sprite-sheet, works when vframes or hframes are greater than 1.
-			</description>
-		</method>
-		<method name="get_hframes" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-				Return the amount of horizontal frames. See [method set_hframes].
-			</description>
-		</method>
 		<method name="get_offset" qualifiers="const">
 			<return type="Vector2">
 			</return>
@@ -39868,13 +39854,6 @@
 			</return>
 			<description>
 				Return the base texture for the sprite.
-			</description>
-		</method>
-		<method name="get_vframes" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-				Return the amount of vertical frames. See [method set_vframes].
 			</description>
 		</method>
 		<method name="is_centered" qualifiers="const">
@@ -39898,13 +39877,6 @@
 				Return true if the sprite is flipped vertically.
 			</description>
 		</method>
-		<method name="is_region" qualifiers="const">
-			<return type="bool">
-			</return>
-			<description>
-				Return if the sprite reads from a region.
-			</description>
-		</method>
 		<method name="set_centered">
 			<argument index="0" name="centered" type="bool">
 			</argument>
@@ -39926,32 +39898,11 @@
 				Set true to flip the sprite vertically.
 			</description>
 		</method>
-		<method name="set_frame">
-			<argument index="0" name="frame" type="int">
-			</argument>
-			<description>
-				Set the texture frame for a sprite-sheet, works when vframes or hframes are greater than 1.
-			</description>
-		</method>
-		<method name="set_hframes">
-			<argument index="0" name="hframes" type="int">
-			</argument>
-			<description>
-				Set the amount of horizontal frames and converts the sprite into a sprite-sheet. This is useful for animation.
-			</description>
-		</method>
 		<method name="set_offset">
 			<argument index="0" name="offset" type="Vector2">
 			</argument>
 			<description>
 				Set the sprite draw offset, useful for setting rotation pivots.
-			</description>
-		</method>
-		<method name="set_region">
-			<argument index="0" name="enabled" type="bool">
-			</argument>
-			<description>
-				Set the sprite as a sub-region of a bigger texture. Useful for texture-atlases.
 			</description>
 		</method>
 		<method name="set_region_rect">
@@ -39968,13 +39919,6 @@
 				Set the base texture for the sprite.
 			</description>
 		</method>
-		<method name="set_vframes">
-			<argument index="0" name="vframes" type="int">
-			</argument>
-			<description>
-				Set the amount of vertical frames and converts the sprite into a sprite-sheet. This is useful for animation.
-			</description>
-		</method>
 	</methods>
 	<members>
 		<member name="centered" type="bool" setter="set_centered" getter="is_centered" brief="">
@@ -39983,26 +39927,14 @@
 		</member>
 		<member name="flip_v" type="bool" setter="set_flip_v" getter="is_flipped_v" brief="">
 		</member>
-		<member name="frame" type="int" setter="set_frame" getter="get_frame" brief="">
-		</member>
-		<member name="hframes" type="int" setter="set_hframes" getter="get_hframes" brief="">
-		</member>
 		<member name="offset" type="Vector2" setter="set_offset" getter="get_offset" brief="">
-		</member>
-		<member name="region" type="bool" setter="set_region" getter="is_region" brief="">
 		</member>
 		<member name="region_rect" type="Rect2" setter="set_region_rect" getter="get_region_rect" brief="">
 		</member>
 		<member name="texture" type="Texture" setter="set_texture" getter="get_texture" brief="">
 		</member>
-		<member name="vframes" type="int" setter="set_vframes" getter="get_vframes" brief="">
-		</member>
 	</members>
 	<signals>
-		<signal name="frame_changed">
-			<description>
-			</description>
-		</signal>
 		<signal name="texture_changed">
 			<description>
 			</description>
@@ -40017,18 +39949,6 @@
 	<description>
 	</description>
 	<methods>
-		<method name="get_frame" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-			</description>
-		</method>
-		<method name="get_hframes" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-			</description>
-		</method>
 		<method name="get_region_rect" qualifiers="const">
 			<return type="Rect2">
 			</return>
@@ -40038,36 +39958,6 @@
 		<method name="get_texture" qualifiers="const">
 			<return type="Texture">
 			</return>
-			<description>
-			</description>
-		</method>
-		<method name="get_vframes" qualifiers="const">
-			<return type="int">
-			</return>
-			<description>
-			</description>
-		</method>
-		<method name="is_region" qualifiers="const">
-			<return type="bool">
-			</return>
-			<description>
-			</description>
-		</method>
-		<method name="set_frame">
-			<argument index="0" name="frame" type="int">
-			</argument>
-			<description>
-			</description>
-		</method>
-		<method name="set_hframes">
-			<argument index="0" name="hframes" type="int">
-			</argument>
-			<description>
-			</description>
-		</method>
-		<method name="set_region">
-			<argument index="0" name="enabled" type="bool">
-			</argument>
 			<description>
 			</description>
 		</method>
@@ -40083,32 +39973,14 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_vframes">
-			<argument index="0" name="vframes" type="int">
-			</argument>
-			<description>
-			</description>
-		</method>
 	</methods>
 	<members>
-		<member name="frame" type="int" setter="set_frame" getter="get_frame" brief="">
-		</member>
-		<member name="hframes" type="int" setter="set_hframes" getter="get_hframes" brief="">
-		</member>
-		<member name="region" type="bool" setter="set_region" getter="is_region" brief="">
-		</member>
 		<member name="region_rect" type="Rect2" setter="set_region_rect" getter="get_region_rect" brief="">
 		</member>
 		<member name="texture" type="Texture" setter="set_texture" getter="get_texture" brief="">
 		</member>
-		<member name="vframes" type="int" setter="set_vframes" getter="get_vframes" brief="">
-		</member>
 	</members>
 	<signals>
-		<signal name="frame_changed">
-			<description>
-			</description>
-		</signal>
 	</signals>
 	<constants>
 	</constants>
