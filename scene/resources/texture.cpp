@@ -830,7 +830,7 @@ void AtlasTexture::set_atlas(const Ref<Texture> &p_atlas) {
 		return;
 	atlas = p_atlas;
 	emit_changed();
-	emit_signal("atlas_changed");
+	_change_notify("atlas");
 }
 Ref<Texture> AtlasTexture::get_atlas() const {
 
@@ -841,6 +841,7 @@ void AtlasTexture::set_region(const Rect2 &p_region) {
 
 	region = p_region;
 	emit_changed();
+	_change_notify("region");
 }
 
 Rect2 AtlasTexture::get_region() const {
@@ -852,6 +853,7 @@ void AtlasTexture::set_margin(const Rect2 &p_margin) {
 
 	margin = p_margin;
 	emit_changed();
+	_change_notify("margin");
 }
 
 Rect2 AtlasTexture::get_margin() const {
@@ -869,8 +871,6 @@ void AtlasTexture::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_margin", "margin"), &AtlasTexture::set_margin);
 	ClassDB::bind_method(D_METHOD("get_margin"), &AtlasTexture::get_margin);
-
-	ADD_SIGNAL(MethodInfo("atlas_changed"));
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "atlas", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), "set_atlas", "get_atlas");
 	ADD_PROPERTY(PropertyInfo(Variant::RECT2, "region"), "set_region", "get_region");
