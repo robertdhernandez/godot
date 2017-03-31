@@ -2207,10 +2207,23 @@ void CanvasItemEditor::edit(CanvasItem *p_canvas_item) {
 
 	drag = DRAG_NONE;
 
+	p_canvas_item->add_change_receptor(this);
+	p_canvas_item->connect("tree_exit", this, "_canvas_item_removed", make_binds(p_canvas_item));
+
 	editor_selection->clear(); //_clear_canvas_items();
 	editor_selection->add_node(p_canvas_item);
 	//_add_canvas_item(p_canvas_item);
 	viewport->update();
+}
+
+void CanvasItemEditor::_changed_callback(Object *p_changed, const char *p_prop) {
+
+	p_changed->cast_to<CanvasItem>()->update();
+}
+
+void CanvasItemEditor::_canvas_item_removed(Object *p_removed) {
+
+	p_removed->remove_change_receptor(this);
 }
 
 void CanvasItemEditor::_find_canvas_items_span(Node *p_node, Rect2 &r_rect, const Transform2D &p_xform) {

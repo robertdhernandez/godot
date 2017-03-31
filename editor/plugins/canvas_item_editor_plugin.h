@@ -368,6 +368,9 @@ class CanvasItemEditor : public VBoxContainer {
 
 protected:
 	void _notification(int p_what);
+	
+	void _changed_callback(Object *p_changed, const char *p_prop);
+	void _canvas_item_removed(Object *p_removed);
 
 	void _node_removed(Node *p_node);
 	static void _bind_methods();
