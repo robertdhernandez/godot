@@ -44,7 +44,6 @@
 #include "scene/2d/screen_button.h"
 #include "scene/2d/sprite.h"
 #include "scene/gui/grid_container.h"
-#include "scene/gui/patch_9_rect.h"
 #include "scene/main/canvas_layer.h"
 #include "scene/main/viewport.h"
 #include "scene/resources/packed_scene.h"
@@ -3665,8 +3664,6 @@ void CanvasItemEditorViewport::_perform_drop_data() {
 				child = memnew(TouchScreenButton);
 			else if (default_type == "TextureRect")
 				child = memnew(TextureRect);
-			else if (default_type == "Patch9Rect")
-				child = memnew(NinePatchRect);
 			else
 				child = memnew(Sprite); // default
 

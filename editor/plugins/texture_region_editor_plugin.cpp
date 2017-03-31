@@ -47,8 +47,6 @@ void TextureRegionEditor::_region_draw() {
 	Ref<Texture> base_tex = NULL;
 	if (node_sprite)
 		base_tex = node_sprite->get_texture();
-	else if (node_patch9)
-		base_tex = node_patch9->get_texture();
 	else if (obj_styleBox.is_valid())
 		base_tex = obj_styleBox->get_texture();
 	else if (atlas_tex.is_valid())
@@ -175,18 +173,12 @@ void TextureRegionEditor::_region_draw() {
 	updating_scroll = false;
 
 	float margins[4];
-	if (node_patch9 || obj_styleBox.is_valid()) {
-		if (node_patch9) {
-			margins[0] = node_patch9->get_patch_margin(MARGIN_TOP);
-			margins[1] = node_patch9->get_patch_margin(MARGIN_BOTTOM);
-			margins[2] = node_patch9->get_patch_margin(MARGIN_LEFT);
-			margins[3] = node_patch9->get_patch_margin(MARGIN_RIGHT);
-		} else if (obj_styleBox.is_valid()) {
-			margins[0] = obj_styleBox->get_margin_size(MARGIN_TOP);
-			margins[1] = obj_styleBox->get_margin_size(MARGIN_BOTTOM);
-			margins[2] = obj_styleBox->get_margin_size(MARGIN_LEFT);
-			margins[3] = obj_styleBox->get_margin_size(MARGIN_RIGHT);
-		}
+	if (obj_styleBox.is_valid()) {
+		margins[0] = obj_styleBox->get_margin_size(MARGIN_TOP);
+		margins[1] = obj_styleBox->get_margin_size(MARGIN_BOTTOM);
+		margins[2] = obj_styleBox->get_margin_size(MARGIN_LEFT);
+		margins[3] = obj_styleBox->get_margin_size(MARGIN_RIGHT);
+			
 		Vector2 pos[4] = {
 			mtx.basis_xform(Vector2(0, margins[0])) + Vector2(0, endpoints[0].y - draw_ofs.y),
 			-mtx.basis_xform(Vector2(0, margins[1])) + Vector2(0, endpoints[2].y - draw_ofs.y),
@@ -224,20 +216,15 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 		if (mb.button_index == BUTTON_LEFT) {
 
 			if (mb.pressed) {
-				if (node_patch9 || obj_styleBox.is_valid()) {
+				if (obj_styleBox.is_valid()) {
 					edited_margin = -1;
+					
 					float margins[4];
-					if (node_patch9) {
-						margins[0] = node_patch9->get_patch_margin(MARGIN_TOP);
-						margins[1] = node_patch9->get_patch_margin(MARGIN_BOTTOM);
-						margins[2] = node_patch9->get_patch_margin(MARGIN_LEFT);
-						margins[3] = node_patch9->get_patch_margin(MARGIN_RIGHT);
-					} else if (obj_styleBox.is_valid()) {
-						margins[0] = obj_styleBox->get_margin_size(MARGIN_TOP);
-						margins[1] = obj_styleBox->get_margin_size(MARGIN_BOTTOM);
-						margins[2] = obj_styleBox->get_margin_size(MARGIN_LEFT);
-						margins[3] = obj_styleBox->get_margin_size(MARGIN_RIGHT);
-					}
+					margins[0] = obj_styleBox->get_margin_size(MARGIN_TOP);
+					margins[1] = obj_styleBox->get_margin_size(MARGIN_BOTTOM);
+					margins[2] = obj_styleBox->get_margin_size(MARGIN_LEFT);
+					margins[3] = obj_styleBox->get_margin_size(MARGIN_RIGHT);
+						
 					Vector2 pos[4] = {
 						mtx.basis_xform(rect.pos + Vector2(0, margins[0])) - draw_ofs,
 						mtx.basis_xform(rect.pos + rect.size - Vector2(0, margins[1])) - draw_ofs,
@@ -271,8 +258,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 								Rect2 r;
 								if (node_sprite)
 									r = node_sprite->get_region_rect();
-								else if (node_patch9)
-									r = node_patch9->get_region_rect();
 								else if (obj_styleBox.is_valid())
 									r = obj_styleBox->get_region_rect();
 								else if (atlas_tex.is_valid())
@@ -284,9 +269,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 							if (node_sprite) {
 								undo_redo->add_do_method(node_sprite, "set_region_rect", rect);
 								undo_redo->add_undo_method(node_sprite, "set_region_rect", node_sprite->get_region_rect());
-							} else if (node_patch9) {
-								undo_redo->add_do_method(node_patch9, "set_region_rect", rect);
-								undo_redo->add_undo_method(node_patch9, "set_region_rect", node_patch9->get_region_rect());
 							} else if (obj_styleBox.is_valid()) {
 								undo_redo->add_do_method(obj_styleBox.ptr(), "set_region_rect", rect);
 								undo_redo->add_undo_method(obj_styleBox.ptr(), "set_region_rect", obj_styleBox->get_region_rect());
@@ -309,8 +291,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 					drag = true;
 					if (node_sprite)
 						rect_prev = node_sprite->get_region_rect();
-					else if (node_patch9)
-						rect_prev = node_patch9->get_region_rect();
 					else if (obj_styleBox.is_valid())
 						rect_prev = obj_styleBox->get_region_rect();
 					else if (atlas_tex.is_valid())
@@ -333,10 +313,7 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 				if (edited_margin >= 0) {
 					undo_redo->create_action("Set Margin");
 					static Margin m[4] = { MARGIN_TOP, MARGIN_BOTTOM, MARGIN_LEFT, MARGIN_RIGHT };
-					if (node_patch9) {
-						undo_redo->add_do_method(node_patch9, "set_patch_margin", m[edited_margin], node_patch9->get_patch_margin(m[edited_margin]));
-						undo_redo->add_undo_method(node_patch9, "set_patch_margin", m[edited_margin], prev_margin);
-					} else if (obj_styleBox.is_valid()) {
+					if (obj_styleBox.is_valid()) {
 						undo_redo->add_do_method(obj_styleBox.ptr(), "set_margin_size", m[edited_margin], obj_styleBox->get_margin_size(m[edited_margin]));
 						undo_redo->add_undo_method(obj_styleBox.ptr(), "set_margin_size", m[edited_margin], prev_margin);
 						obj_styleBox->emit_signal(CoreStringNames::get_singleton()->changed);
@@ -350,11 +327,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 					} else if (atlas_tex.is_valid()) {
 						undo_redo->add_do_method(atlas_tex.ptr(), "set_region", atlas_tex->get_region());
 						undo_redo->add_undo_method(atlas_tex.ptr(), "set_region", rect_prev);
-					} else if (node_patch9) {
-						// FIXME: Is this intentional?
-					} else if (node_patch9) {
-						undo_redo->add_do_method(node_patch9, "set_region_rect", node_patch9->get_region_rect());
-						undo_redo->add_undo_method(node_patch9, "set_region_rect", rect_prev);
 					} else if (obj_styleBox.is_valid()) {
 						undo_redo->add_do_method(obj_styleBox.ptr(), "set_region_rect", obj_styleBox->get_region_rect());
 						undo_redo->add_undo_method(obj_styleBox.ptr(), "set_region_rect", rect_prev);
@@ -374,8 +346,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 				drag = false;
 				if (edited_margin >= 0) {
 					static Margin m[4] = { MARGIN_TOP, MARGIN_BOTTOM, MARGIN_LEFT, MARGIN_RIGHT };
-					if (node_patch9)
-						node_patch9->set_patch_margin(m[edited_margin], prev_margin);
 					if (obj_styleBox.is_valid())
 						obj_styleBox->set_margin_size(m[edited_margin], prev_margin);
 					edited_margin = -1;
@@ -416,8 +386,6 @@ void TextureRegionEditor::_region_input(const InputEvent &p_input) {
 				if (new_margin < 0)
 					new_margin = 0;
 				static Margin m[4] = { MARGIN_TOP, MARGIN_BOTTOM, MARGIN_LEFT, MARGIN_RIGHT };
-				if (node_patch9)
-					node_patch9->set_patch_margin(m[edited_margin], new_margin);
 				if (obj_styleBox.is_valid())
 					obj_styleBox->set_margin_size(m[edited_margin], new_margin);
 			} else {
@@ -567,8 +535,6 @@ void TextureRegionEditor::_zoom_out() {
 void TextureRegionEditor::apply_rect(const Rect2 &rect) {
 	if (node_sprite)
 		node_sprite->set_region_rect(rect);
-	else if (node_patch9)
-		node_patch9->set_region_rect(rect);
 	else if (obj_styleBox.is_valid())
 		obj_styleBox->set_region_rect(rect);
 	else if (atlas_tex.is_valid())
@@ -587,8 +553,7 @@ void TextureRegionEditor::_notification(int p_what) {
 }
 
 void TextureRegionEditor::_node_removed(Object *p_obj) {
-	if (p_obj == node_sprite || p_obj == node_patch9 || p_obj == obj_styleBox.ptr() || p_obj == atlas_tex.ptr()) {
-		node_patch9 = NULL;
+	if (p_obj == node_sprite || p_obj == obj_styleBox.ptr() || p_obj == atlas_tex.ptr()) {
 		node_sprite = NULL;
 		obj_styleBox = Ref<StyleBox>(NULL);
 		atlas_tex = Ref<AtlasTexture>(NULL);
@@ -617,15 +582,12 @@ void TextureRegionEditor::_bind_methods() {
 void TextureRegionEditor::edit(Object *p_obj) {
 	if (node_sprite && node_sprite->is_connected("texture_changed", this, "_edit_region"))
 		node_sprite->disconnect("texture_changed", this, "_edit_region");
-	if (node_patch9 && node_patch9->is_connected("texture_changed", this, "_edit_region"))
-		node_patch9->disconnect("texture_changed", this, "_edit_region");
 	if (obj_styleBox.is_valid() && obj_styleBox->is_connected("texture_changed", this, "_edit_region"))
 		obj_styleBox->disconnect("texture_changed", this, "_edit_region");
 	if (atlas_tex.is_valid() && atlas_tex->is_connected("atlas_changed", this, "_edit_region"))
 		atlas_tex->disconnect("atlas_changed", this, "_edit_region");
 	if (p_obj) {
 		node_sprite = p_obj->cast_to<Sprite>();
-		node_patch9 = p_obj->cast_to<NinePatchRect>();
 		if (p_obj->cast_to<StyleBoxTexture>())
 			obj_styleBox = Ref<StyleBoxTexture>(p_obj->cast_to<StyleBoxTexture>());
 		if (p_obj->cast_to<AtlasTexture>()) {
@@ -640,15 +602,12 @@ void TextureRegionEditor::edit(Object *p_obj) {
 	} else {
 		if (node_sprite)
 			node_sprite->disconnect("tree_exited", this, "_node_removed");
-		else if (node_patch9)
-			node_patch9->disconnect("tree_exited", this, "_node_removed");
 		else if (obj_styleBox.is_valid())
 			obj_styleBox->disconnect("tree_exited", this, "_node_removed");
 		else if (atlas_tex.is_valid())
 			atlas_tex->disconnect("tree_exited", this, "_node_removed");
 
 		node_sprite = NULL;
-		node_patch9 = NULL;
 		obj_styleBox = Ref<StyleBoxTexture>(NULL);
 		atlas_tex = Ref<AtlasTexture>(NULL);
 	}
@@ -665,8 +624,6 @@ void TextureRegionEditor::_edit_region() {
 	Ref<Texture> texture = NULL;
 	if (node_sprite)
 		texture = node_sprite->get_texture();
-	else if (node_patch9)
-		texture = node_patch9->get_texture();
 	else if (obj_styleBox.is_valid())
 		texture = obj_styleBox->get_texture();
 	else if (atlas_tex.is_valid())
@@ -731,8 +688,6 @@ void TextureRegionEditor::_edit_region() {
 
 	if (node_sprite)
 		rect = node_sprite->get_region_rect();
-	else if (node_patch9)
-		rect = node_patch9->get_region_rect();
 	else if (obj_styleBox.is_valid())
 		rect = obj_styleBox->get_region_rect();
 	else if (atlas_tex.is_valid())
@@ -765,7 +720,6 @@ Vector2 TextureRegionEditor::snap_point(Vector2 p_target) const {
 
 TextureRegionEditor::TextureRegionEditor(EditorNode *p_editor) {
 	node_sprite = NULL;
-	node_patch9 = NULL;
 	obj_styleBox = Ref<StyleBoxTexture>(NULL);
 	atlas_tex = Ref<AtlasTexture>(NULL);
 	editor = p_editor;
