@@ -644,7 +644,11 @@ void TextureRegionEditor::edit(Object *p_obj) {
 }
 
 void TextureRegionEditor::_changed_callback(Object *p_changed, const char *p_prop) {
-	_edit_region();
+
+	if (!is_visible())
+		return;
+	if (p_prop == StringName("atlas") || p_prop == StringName("texture"))
+		_edit_region();
 }
 
 void TextureRegionEditor::_edit_region() {

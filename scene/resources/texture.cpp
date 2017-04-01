@@ -839,6 +839,8 @@ Ref<Texture> AtlasTexture::get_atlas() const {
 
 void AtlasTexture::set_region(const Rect2 &p_region) {
 
+	if (region == p_region)
+		return;
 	region = p_region;
 	emit_changed();
 	_change_notify("region");
@@ -851,6 +853,8 @@ Rect2 AtlasTexture::get_region() const {
 
 void AtlasTexture::set_margin(const Rect2 &p_margin) {
 
+	if (margin == p_margin)
+		return;
 	margin = p_margin;
 	emit_changed();
 	_change_notify("margin");

@@ -103,6 +103,9 @@ void TextureEditor::_notification(int p_what) {
 }
 
 void TextureEditor::_changed_callback(Object *p_changed, const char *p_prop) {
+
+	if (!is_visible())
+		return;
 	update();
 }
 
