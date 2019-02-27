@@ -341,6 +341,7 @@ struct _VariantCall {
 	VCALL_LOCALMEM1R(Vector2, project);
 	VCALL_LOCALMEM1R(Vector2, angle_to);
 	VCALL_LOCALMEM1R(Vector2, angle_to_point);
+	VCALL_LOCALMEM2R(Vector2, move_towards);
 	VCALL_LOCALMEM2R(Vector2, linear_interpolate);
 	VCALL_LOCALMEM2R(Vector2, slerp);
 	VCALL_LOCALMEM4R(Vector2, cubic_interpolate);
@@ -382,6 +383,7 @@ struct _VariantCall {
 	VCALL_LOCALMEM0R(Vector3, inverse);
 	VCALL_LOCALMEM1R(Vector3, snapped);
 	VCALL_LOCALMEM2R(Vector3, rotated);
+	VCALL_LOCALMEM2R(Vector3, move_towards);
 	VCALL_LOCALMEM2R(Vector3, linear_interpolate);
 	VCALL_LOCALMEM2R(Vector3, slerp);
 	VCALL_LOCALMEM4R(Vector3, cubic_interpolate);
@@ -1559,6 +1561,7 @@ void register_variant_methods() {
 	ADDFUNC1R(VECTOR2, VECTOR2, Vector2, project, VECTOR2, "b", varray());
 	ADDFUNC1R(VECTOR2, REAL, Vector2, angle_to, VECTOR2, "to", varray());
 	ADDFUNC1R(VECTOR2, REAL, Vector2, angle_to_point, VECTOR2, "to", varray());
+	ADDFUNC2R(VECTOR2, VECTOR2, Vector2, move_towards, VECTOR2, "target", REAL, "max_delta_distance", varray());
 	ADDFUNC2R(VECTOR2, VECTOR2, Vector2, linear_interpolate, VECTOR2, "b", REAL, "t", varray());
 	ADDFUNC2R(VECTOR2, VECTOR2, Vector2, slerp, VECTOR2, "b", REAL, "t", varray());
 	ADDFUNC4R(VECTOR2, VECTOR2, Vector2, cubic_interpolate, VECTOR2, "b", VECTOR2, "pre_a", VECTOR2, "post_b", REAL, "t", varray());
@@ -1599,6 +1602,7 @@ void register_variant_methods() {
 	ADDFUNC0R(VECTOR3, VECTOR3, Vector3, inverse, varray());
 	ADDFUNC1R(VECTOR3, VECTOR3, Vector3, snapped, VECTOR3, "by", varray());
 	ADDFUNC2R(VECTOR3, VECTOR3, Vector3, rotated, VECTOR3, "axis", REAL, "phi", varray());
+	ADDFUNC2R(VECTOR3, VECTOR3, Vector3, move_towards, VECTOR3, "target", REAL, "max_delta_distance", varray());
 	ADDFUNC2R(VECTOR3, VECTOR3, Vector3, linear_interpolate, VECTOR3, "b", REAL, "t", varray());
 	ADDFUNC2R(VECTOR3, VECTOR3, Vector3, slerp, VECTOR3, "b", REAL, "t", varray());
 	ADDFUNC4R(VECTOR3, VECTOR3, Vector3, cubic_interpolate, VECTOR3, "b", VECTOR3, "pre_a", VECTOR3, "post_b", REAL, "t", varray());

@@ -88,6 +88,8 @@ struct Vector3 {
 	void rotate(const Vector3 &p_axis, real_t p_phi);
 	Vector3 rotated(const Vector3 &p_axis, real_t p_phi) const;
 
+	Vector3 move_towards(const Vector3 &p_target, real_t p_max_delta_dist) const;
+
 	/* Static Methods between 2 vector3s */
 
 	_FORCE_INLINE_ Vector3 linear_interpolate(const Vector3 &p_b, real_t p_t) const;

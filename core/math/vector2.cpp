@@ -145,6 +145,20 @@ Vector2 Vector2::clamped(real_t p_len) const {
 	return v;
 }
 
+Vector2 Vector2::move_towards(const Vector2 &p_target, real_t p_max_delta_dist) const {
+
+	Vector2 delta = p_target - *this;
+	real_t l = delta.length_squared();
+
+	if (l == 0) {
+		return p_target;
+	}
+
+	p_max_delta_dist *= p_max_delta_dist;
+	real_t t = (p_max_delta_dist < l ? p_max_delta_dist : l) / l;
+	return this->linear_interpolate(p_target, t);
+}
+
 Vector2 Vector2::cubic_interpolate(const Vector2 &p_b, const Vector2 &p_pre_a, const Vector2 &p_post_b, real_t p_t) const {
 
 	Vector2 p0 = p_pre_a;

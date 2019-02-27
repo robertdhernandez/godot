@@ -66,6 +66,8 @@ struct Vector2 {
 	real_t angle_to(const Vector2 &p_vector2) const;
 	real_t angle_to_point(const Vector2 &p_vector2) const;
 
+	Vector2 move_towards(const Vector2 &p_target, real_t p_max_delta_dist) const;
+
 	real_t dot(const Vector2 &p_other) const;
 	real_t cross(const Vector2 &p_other) const;
 	Vector2 project(const Vector2 &p_b) const;

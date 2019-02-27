@@ -44,6 +44,20 @@ Vector3 Vector3::rotated(const Vector3 &p_axis, real_t p_phi) const {
 	return r;
 }
 
+Vector3 Vector3::move_towards(const Vector3 &p_target, real_t p_max_delta_dist) const {
+
+	Vector3 delta = p_target - *this;
+	real_t l = delta.length_squared();
+
+	if (l == 0) {
+		return p_target;
+	}
+
+	p_max_delta_dist *= p_max_delta_dist;
+	real_t t = (p_max_delta_dist < l ? p_max_delta_dist : l) / l;
+	return this->linear_interpolate(p_target, t);
+}
+
 void Vector3::set_axis(int p_axis, real_t p_value) {
 	ERR_FAIL_INDEX(p_axis, 3);
 	coord[p_axis] = p_value;

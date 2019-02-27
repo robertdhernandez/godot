@@ -168,6 +168,16 @@
 				Returns the axis of the vector's smallest value. See [code]AXIS_*[/code] constants.
 			</description>
 		</method>
+		<method name="move_towards">
+			<return type="Vector3">
+			</return>
+			<argument index="0" name="target" type="Vector3">
+			<argument index="1" name="max_delta_distance" type="float">
+			</argument>
+			<description>
+				Calculate a position between the points specified by current and target, moving no farther than the distance specified by [code]max_delta_distance[/code].
+			</description>
+		</method>
 		<method name="normalized">
 			<return type="Vector3">
 			</return>
